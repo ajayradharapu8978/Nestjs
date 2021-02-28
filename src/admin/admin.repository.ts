@@ -21,7 +21,6 @@ export class adminRepository extends Repository<Ajay>{
     async validateAdminPassword(adminDto: createAdminDto): Promise<string>{
         const {userName, password} = adminDto;
         const admin = await this.findOne({userName});
-
         if (admin && await admin.validatePassword(password)) {
             return admin.userName;
         }

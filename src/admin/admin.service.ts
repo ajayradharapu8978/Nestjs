@@ -1,5 +1,5 @@
 import { createAdminDto } from '../dto/create-admin.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { adminRepository } from './admin.repository';
 import { JwtService } from '@nestjs/jwt';
@@ -22,10 +22,15 @@ export class AdminService {
     }
 
     async signIn(adminDto: createAdminDto): Promise<{ accessToken: string}> {
-        const userName = this.ajayRepository.validateAdminPassword(adminDto);
+        const userName = await this.ajayRepository.validateAdminPassword(adminDto);
         const payload = userName;
-        const accessToken = await this.jwtService.sign({payload});
-        return { accessToken };
+        if (payload === null) {
+            throw new UnauthorizedException("invalid Credentials");
+            
+        } else {
+            const accessToken = await this.jwtService.sign({payload});
+            return { accessToken };
+        }
     }
 
 }

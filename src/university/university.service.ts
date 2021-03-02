@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FilterDto } from 'src/dto/filter.dto';
 import { UniversityDto } from 'src/dto/university.dto';
 import { University } from 'src/entities/universities.entity';
 import { UniversityRepository } from './university.repository';
@@ -59,5 +60,10 @@ export class UniversityService {
         if (result.affected === 0) {
             throw new NotFoundException(`University with Id "${id}" not found`);
         }
+    }
+
+    async getFilterUniversities(filterDto: FilterDto): Promise<University[]>{
+        console.log(filterDto);
+        return this.universityRepository.getFilterUniversities(filterDto);
     }
 }

@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { FilterDto } from 'src/dto/filter.dto';
 import { UniversityDto } from 'src/dto/university.dto';
 import { University } from 'src/entities/universities.entity';
 import { UniversityService } from './university.service';
@@ -33,5 +34,14 @@ export class UniversityController {
     @Delete('/:id')
     deleteUniversity(@Param('id') id: string): Promise<void>{
         return this.universityService.deleteUniversity(id);
+    }
+
+    @Get('search')
+    getUniversities(@Query() filterDto: FilterDto): Promise<University[]>{
+        if (Object.keys(filterDto).length) {
+            return this.universityService.getFilterUniversities(filterDto);
+        } else {
+            return this.universityService.getTotalUniversities();
+        }
     }
 }

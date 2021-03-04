@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UniversityDto } from 'src/dto/university.dto';
 import { University } from 'src/entities/universities.entity';
 import { UniversityService } from './university.service';
@@ -22,6 +22,7 @@ export class UniversityController {
     }
 
     @Post()
+    @UsePipes(ValidationPipe)
     createUniversity(@Body() universityDto: UniversityDto): Promise<University>{
         return this.universityService.createUniversity(universityDto);
     }

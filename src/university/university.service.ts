@@ -36,17 +36,12 @@ export class UniversityService {
             throw new NotFoundException(`University with Id "${id}" not found`);
         }
         else {
-
-            const university = await this.universityRepository.findOne(id)
-
-            console.log(university);
+            const university = await this.universityRepository.findOne(id);
 
             if (!university) {
-
                 throw new NotFoundException(`University with Id "${id}" not found`);
             }
             else {
-
                 const { universityName, email, phone, country, Website, address } = universityDto;
                 if (universityName) {
                     university.universityName = universityName;

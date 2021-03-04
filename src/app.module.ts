@@ -18,7 +18,7 @@ import { UniversityModule } from './university/university.module';
       useNewUrlParser: true,
       autoLoadEntities: true,
       useUnifiedTopology: true,
-      entities: [join(__dirname, '**/**.entity.ts')]
+      entities: [join(__dirname, '**/**.entity{.ts,.js}')]
     }),
     AdminModule,
     UserModule,

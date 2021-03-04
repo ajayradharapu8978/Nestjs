@@ -3,5 +3,4 @@ export class Course{
     courseName: string;
     fee: string;
     duration: string;
-
 }

@@ -10,60 +10,76 @@ export class UniversityService {
     constructor(
         @InjectRepository(UniversityRepository)
         private universityRepository: UniversityRepository
-    ){}
+    ) { }
 
-    async getTotalUniversities(){
+    async getTotalUniversities() {
         const data = await this.universityRepository.find();
         return data;
     }
 
-    async getUniversityById(id: string): Promise<University>{
-        const found = await this.universityRepository.findOne(id);
-        if (!found) {
+    async getUniversityById(id: string): Promise<University> {
+        if (id.length !== 24) {
             throw new NotFoundException(`University with Id "${id}" not found`);
         }
-        return found;
+        else {
+            const found = await this.universityRepository.findOne(id);
+            return found;
+        }
     }
 
-    async createUniversity(universityDto: UniversityDto): Promise<University>{
+    async createUniversity(universityDto: UniversityDto): Promise<University> {
         return this.universityRepository.createUniversity(universityDto);
     }
 
-    async updateUniversity(id: string, universityDto: UniversityDto): Promise<University>{
-        const university = await this.getUniversityById(id);
-        
-        const {universityName, email, phone, country, Website, address} = universityDto;
-        if (universityName) {
-        university.universityName = universityName;
+    async updateUniversity(id: string, universityDto: UniversityDto): Promise<University> {
+        if (id.length !== 24) {
+            throw new NotFoundException(`University with Id "${id}" not found`);
         }
-        if (email) {
-            university.email = email;
-        }
-        if (phone) {
-            university.phone = phone;
-        }
-        if (country) {
-            university.country = country;
-        }
-        if (Website) {
-            university.Website = Website;
-        }
-        if (address) {
-            university.address = address;
-        }
+        else {
 
-        return university;
+            const university = await this.universityRepository.findOne(id)
+
+            console.log(university);
+
+            if (!university) {
+
+                throw new NotFoundException(`University with Id "${id}" not found`);
+            }
+            else {
+
+                const { universityName, email, phone, country, Website, address } = universityDto;
+                if (universityName) {
+                    university.universityName = universityName;
+                }
+                if (email) {
+                    university.email = email;
+                }
+                if (phone) {
+                    university.phone = phone;
+                }
+                if (country) {
+                    university.country = country;
+                }
+                if (Website) {
+                    university.Website = Website;
+                }
+                if (address) {
+                    university.address = address;
+                }
+                return university;
+
+            }
+        }
     }
 
-    async deleteUniversity(id: string): Promise<void>{
+    async deleteUniversity(id: string): Promise<void> {
         const result = await this.universityRepository.delete(id);
         if (result.affected === 0) {
             throw new NotFoundException(`University with Id "${id}" not found`);
         }
     }
 
-    async getFilterUniversities(filterDto: FilterDto): Promise<University[]>{
-        console.log(filterDto);
-        return this.universityRepository.getFilterUniversities(filterDto);
+    async getFilterUniversities(search: string): Promise<University[]> {
+        return this.universityRepository.getFilterUniversities(search);
     }
 }
